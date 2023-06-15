@@ -4,6 +4,7 @@ const sequelize = new Sequelize("sql12625551", "sql12625551", "Bx2zgf43Pu", {
   host: "sql12.freesqldatabase.com",
   dialect: "mysql",
   port: 3306,
+  logging: false,
 });
 
 // Models
@@ -28,6 +29,10 @@ const User = sequelize.define(
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    token: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {

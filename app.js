@@ -4,8 +4,17 @@ const { sequelize, User } = require("./models");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-app.use(bodyParser.json());
+const {
+  encryptPassword,
+  decryptPassword,
+  comparePassword,
+} = require("./utils/password");
+const { location } = require("express/lib/response");
+const jwt = require("./utils/jwt");
+const { createToken } = require("./utils/jwt");
+
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(cors());
 
 app.post("/users/signup", async (req, res) => {
@@ -29,10 +38,12 @@ app.post("/users/signup", async (req, res) => {
       email: req.body.email,
     },
   });
+
   if (foundUser) {
-    res.json({ isSuccess: false, error: "user already axist" });
+    return res.json({ isSuccess: false, error: "user already axist" });
   }
 
+  req.body.password = encryptPassword(req.body.password);
   const savedUser = await User.create(req.body);
 
   res.json({ isSuccess: true });
@@ -45,12 +56,19 @@ app.post("/users/login", async (req, res) => {
       email: req.body.email,
     },
   });
+
   if (!foundUser) {
     return res.json({ isSuccess: false, error: "user not found" });
   }
-  if (foundUser.password !== req.body.password) {
+  const checkPass = comparePassword(req.body.password, foundUser.password);
+  if (!checkPass) {
     return res.json({ isSuccess: false, error: "Password is incorrect" });
   }
+
+  const token = createToken({ id: foundUser.id, email: foundUser.email });
+  console.log(token);
+  foundUser.token = token;
+  await foundUser.save();
 
   res.json({
     isSuccess: true,
@@ -59,7 +77,7 @@ app.post("/users/login", async (req, res) => {
 });
 
 try {
-  sequelize.sync().then(() => {
+  sequelize.sync({ alter: true }).then(() => {
     console.log("Connection has been established successfully.");
     app.listen(4000, () => {
       console.log("Server is running at 4000");
