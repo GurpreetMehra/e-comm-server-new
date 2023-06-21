@@ -15,6 +15,7 @@
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^3.3.4",
+    "ng-http-interceptor": "^4.0.0",
     "nodemon": "^2.0.22",
     "sequelize": "^6.32.0",
     "validator": "^13.9.0"

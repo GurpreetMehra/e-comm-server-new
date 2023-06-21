@@ -555,7 +555,7 @@ inherits@2, inherits@2.0.4, inherits@^2.0.3:
 
 install@^0.13.0:
   version "0.13.0"
-  resolved "https://registry.npmjs.org/install/-/install-0.13.0.tgz"
+  resolved "https://registry.yarnpkg.com/install/-/install-0.13.0.tgz#6af6e9da9dd0987de2ab420f78e60d9c17260776"
   integrity sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==
 
 ipaddr.js@1.9.1:
@@ -774,6 +774,11 @@ negotiator@0.6.3:
   version "0.6.3"
   resolved "https://registry.npmjs.org/negotiator/-/negotiator-0.6.3.tgz"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
+
+ng-http-interceptor@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/ng-http-interceptor/-/ng-http-interceptor-4.0.0.tgz#5c242dd18aec215f56e13d87e64bacc58fc01053"
+  integrity sha512-GXBI3CvyANchB/lk87mf0DSIWeE2oWwEjALwTpkkWEFXIGnmFfARWZoqvrsmDBAjZiS4zM9X3cWse/uLNIEz0Q==
 
 node-addon-api@^5.0.0:
   version "5.1.0"
