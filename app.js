@@ -24,10 +24,16 @@ app.post("/users/signup", async (req, res) => {
       max: 16,
     })
   ) {
-    return res.json({ isSuccess: false, error: "name is not enter" });
+    return res.status(400).json({
+      isSuccess: false,
+      error: "name is not enter",
+    });
   }
   if (!validator.isEmail(req.body.email)) {
-    return res.json({ isSuccess: false, error: "email is not enter" });
+    res.status(400).json({
+      isSuccess: false,
+      error: "email is not enter",
+    });
   }
 
   const foundUser = await User.findOne({
@@ -37,21 +43,27 @@ app.post("/users/signup", async (req, res) => {
   });
 
   if (!req.body.password) {
-    return res.json({ isSuccess: false, error: "Password is not enter" });
+    return res.status(400).json({
+      isSuccess: false,
+      error: "Password is not enter",
+    });
   }
 
   if (foundUser) {
-    return res.json({ isSuccess: false, error: "user already axist" });
+    res.status(400).json({
+      isSuccess: false,
+      error: "user already axist",
+    });
   }
 
   req.body.password = encryptPassword(req.body.password);
   const savedUser = await User.create(req.body);
 
   setTimeout(() => {
-    res.json({
+    res.status(200).json({
       isSuccess: true,
     });
-  }, 2000);
+  }, 1000);
 });
 
 app.post("/users/login", async (req, res) => {
@@ -62,7 +74,7 @@ app.post("/users/login", async (req, res) => {
   });
 
   if (!foundUser) {
-    return res.json({ isSuccess: false, error: "user not found" });
+    return res.json({ isSuccess: false, error: "Email is incorrect" });
   }
   const checkPass = comparePassword(req.body.password, foundUser.password);
 
@@ -87,7 +99,7 @@ app.post("/users/login", async (req, res) => {
       isSuccess: true,
       user: data,
     });
-  }, 10000);
+  }, 3000);
 });
 
 try {
