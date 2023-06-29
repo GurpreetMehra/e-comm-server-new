@@ -2,7 +2,6 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const encryptPassword = (encryptPassword) => {
-  // console.log(encryptPassword);
   const hash = bcrypt.hashSync(encryptPassword, saltRounds);
   return hash;
 };
