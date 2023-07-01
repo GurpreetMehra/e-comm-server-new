@@ -1,19 +1,23 @@
 const express = require("express");
-const productRouter = new express.Router();
+const router = new express.Router();
 const { Product } = require("../models");
 const productMapper = require("../mappers/product");
 
-productRouter.post("/products", async (req, res) => {
+// create - /products -POST
+// get - /products -get
+// getOne - /products/:id
+
+router.post("/", async (req, res) => {
   if (!req.body.name) {
     return res.status(400).json({
       isSuccess: false,
       error: "name is not enter",
     });
   }
-  if (!req.body.prize) {
+  if (!req.body.price) {
     return res.status(400).json({
       isSuccess: false,
-      error: "prize is not enter",
+      error: "price is not enter",
     });
   }
   if (!req.body.description) {
@@ -30,11 +34,67 @@ productRouter.post("/products", async (req, res) => {
   }
 
   const savedProduct = await Product.create(req.body);
-
+  console.log(savedProduct);
   return res.status(200).json({
     isSuccess: true,
     product: productMapper(savedProduct),
   });
 });
 
-module.exports = productRouter;
+router.get("/", async (req, res) => {
+  const productGet = await Product.findAll({
+    where: {},
+  });
+
+  const productGetSave = productMapper(productGet);
+
+  return res.status(200).json({
+    isSuccess: true,
+    productData: productGetSave,
+  });
+});
+
+router.get("/:id", async (req, res) => {
+  const findOneData = await Product.findOne({
+    where: {
+      id: req.params.id,
+    },
+  });
+
+  return res.status(200).json({
+    isSuccess: true,
+    product: productMapper(findOneData),
+  });
+});
+
+router.put("/:id", async (req, res) => {
+  const dataPut = {
+    name: req.body.name,
+    price: req.body.price,
+    description: req.body.description,
+    isOnSale: req.body.isOnSale,
+  };
+  const updateData = await Product.update(dataPut, {
+    where: {
+      id: req.params.id,
+    },
+  });
+  return res.status(200).json({
+    isSuccess: true,
+    product: productMapper(updateData),
+  });
+});
+
+router.delete("/:id", async (req, res) => {
+  const delData = await Product.destroy({
+    where: {
+      id: req.params.id,
+    },
+  });
+  return res.status(200).json({
+    isSuccess: true,
+    product: productMapper(delData),
+  });
+});
+
+module.exports = router;

@@ -9,11 +9,12 @@ const productRouters = require("./Routers/productRouters");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
+
 app.use(authRouters);
-app.use(productRouters);
+app.use("/products", productRouters);
 
 try {
-  sequelize.sync({ alter: true, force: true }).then(() => {
+  sequelize.sync({ alter: true }).then(() => {
     console.log("Connection has been established successfully.");
     app.listen(4000, () => {
       console.log("Server is running at 4000");

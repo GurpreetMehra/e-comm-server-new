@@ -35,11 +35,17 @@ const User = sequelize.define("user", {
 });
 
 const Product = sequelize.define("product", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  prize: {
+  price: {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
