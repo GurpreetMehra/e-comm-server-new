@@ -71,6 +71,38 @@ const Product = sequelize.define("product", {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  img1: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  img2: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  img3: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  img4: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
-module.exports = { sequelize, User, Product };
+const Category = sequelize.define("category", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
+
+Category.hasMany(Product);
+Product.belongsTo(Category);
+
+module.exports = { sequelize, User, Product, Category };

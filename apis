@@ -5,3 +5,7 @@ content-type: application/json
     "email": "guri16@gmail.com",
     "password": "guri16"
 }
+
+
+
+ "Images": ["https://i.ibb.co/cgZNPh8/image-63.png","https://i.ibb.co/vXhngZ8/image-59.png","https://i.ibb.co/5RJJ3GT/image-58.png","https://i.ibb.co/yNVTVw5/image-57.png"],

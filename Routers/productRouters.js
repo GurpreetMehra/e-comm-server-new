@@ -1,7 +1,8 @@
 const express = require("express");
 const router = new express.Router();
-const { Product } = require("../models");
+const { Product, Category } = require("../models");
 const productMapper = require("../mappers/product");
+const validator = require("validator");
 
 // create - /products -POST
 // get - /products -get
@@ -26,15 +27,28 @@ router.post("/", async (req, res) => {
       error: "description is not enter",
     });
   }
-  if (!req.body.isOnSale) {
+
+  if (
+    req.body.rating &&
+    !validator.isFloat(req.body.rating, {
+      min: 0,
+      max: 5,
+    })
+  ) {
     return res.status(400).json({
       isSuccess: false,
-      error: "isONSale is not enter",
+      error: "error",
     });
   }
 
+  const saveImages =
+    ((req.body.img1 = req.body.Images[0]),
+    (req.body.img2 = req.body.Images[1]),
+    (req.body.img3 = req.body.Images[2]),
+    (req.body.img4 = req.body.Images[3]));
+
   const savedProduct = await Product.create(req.body);
-  console.log(savedProduct);
+
   return res.status(200).json({
     isSuccess: true,
     product: productMapper(savedProduct),
@@ -43,6 +57,7 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
   const productGet = await Product.findAll({
+    include: [{ model: Category, attributes: ["name"] }],
     where: {},
   });
 
@@ -63,16 +78,107 @@ router.get("/:id", async (req, res) => {
 
   return res.status(200).json({
     isSuccess: true,
-    product: productMapper(findOneData),
+    productOne: productMapper(findOneData),
   });
 });
 
 router.put("/:id", async (req, res) => {
+  const product = await Product.findAll({
+    where: {},
+  });
+
+  if (!product) {
+    return res.status(400).json({
+      isSuccess: false,
+      error: "error",
+    });
+  }
+
+  if (
+    req.body.name &&
+    !validator.isLength(req.body.name, {
+      min: 0,
+      max: 15,
+    })
+  ) {
+    return res.status(400).json({
+      isSuccess: false,
+      error: "error",
+    });
+  }
+
+  if (req.body.price && !req.body.price) {
+    return res.status(400).json({
+      isSuccess: false,
+      error: "error",
+    });
+  }
+
+  if (req.body.description && !req.body.description) {
+    return res.status(400).json({
+      isSuccess: false,
+      error: "error",
+    });
+  }
+
+  if (req.body.isOnSale && !req.body.isOnSale) {
+    return res.status(400).json({
+      isSuccess: false,
+      error: "error",
+    });
+  }
+
+  if (req.body.salePercentage && !req.body.salePercentage) {
+    return res.status(400).json({
+      isSuccess: false,
+      error: "error",
+    });
+  }
+
+  if (req.body.Images && !req.body.Images) {
+    return res.status(400).json({
+      isSuccess: false,
+      error: "error",
+    });
+  }
+
+  if (req.body.categoryId && !req.body.categoryId) {
+    return res.status(400).json({
+      isSuccess: false,
+      error: "error",
+    });
+  }
+
+  if (
+    req.body.rating &&
+    !validator.isFloat(req.body.rating, {
+      min: 0,
+      max: 5,
+    })
+  ) {
+    return res.status(400).json({
+      isSuccess: false,
+      error: "error",
+    });
+  }
+  const saveImages =
+    ((req.body.img1 = req.body.Images[0]),
+    (req.body.img2 = req.body.Images[1]),
+    (req.body.img3 = req.body.Images[2]),
+    (req.body.img4 = req.body.Images[3]));
+
   const dataPut = {
     name: req.body.name,
     price: req.body.price,
     description: req.body.description,
     isOnSale: req.body.isOnSale,
+    rating: req.body.rating,
+    salePercentage: req.body.salePercentage,
+    img1: req.body.img1,
+    img2: req.body.img2,
+    img3: req.body.img3,
+    img4: req.body.img4,
+    Images: req.body.Images,
   };
   const updateData = await Product.update(dataPut, {
     where: {

@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const authRouters = require("./Routers/authRouters");
 const productRouters = require("./Routers/productRouters");
+const category = require("./Routers/category");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -12,6 +13,7 @@ app.use(cors());
 
 app.use(authRouters);
 app.use("/products", productRouters);
+app.use("/category", category);
 
 try {
   sequelize.sync({ alter: true }).then(() => {
