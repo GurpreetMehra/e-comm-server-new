@@ -102,7 +102,43 @@ const Category = sequelize.define("category", {
   },
 });
 
+const Variant = sequelize.define("variant", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
+
+const VariantValue = sequelize.define("variantValue", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+  valueOne: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  valueTwo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  valueThree: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
+
+// "Relations"
+
 Category.hasMany(Product);
 Product.belongsTo(Category);
 
-module.exports = { sequelize, User, Product, Category };
+module.exports = { sequelize, User, Product, Category, Variant, VariantValue };
