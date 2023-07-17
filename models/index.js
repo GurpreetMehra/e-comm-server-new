@@ -136,9 +136,32 @@ const VariantValue = sequelize.define("variantValue", {
   },
 });
 
+const WishList = sequelize.define("wishList", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },
+});
+
 // "Relations"
 
 Category.hasMany(Product);
 Product.belongsTo(Category);
 
-module.exports = { sequelize, User, Product, Category, Variant, VariantValue };
+Product.hasMany(WishList);
+WishList.belongsTo(Product);
+
+User.hasMany(WishList);
+WishList.belongsTo(User);
+
+module.exports = {
+  sequelize,
+  User,
+  Product,
+  Category,
+  Variant,
+  VariantValue,
+  WishList,
+};

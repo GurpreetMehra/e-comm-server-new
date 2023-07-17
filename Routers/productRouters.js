@@ -1,12 +1,43 @@
 const express = require("express");
 const router = new express.Router();
-const { Product, Category } = require("../models");
+const { Product, Category, WishList, User } = require("../models");
 const productMapper = require("../mappers/product");
 const validator = require("validator");
+const { tokenIsRequire, tokenIsOptional } = require("../utils/jwt");
 
 // create - /products -POST
 // get - /products -get
 // getOne - /products/:id
+
+router.post("/wishList", tokenIsRequire, async (req, res) => {
+  const productWishList =
+    ((req.body.productId = req.body.wishlistProductId),
+    (req.body.userId = req.user.id));
+
+  const findOneData = await WishList.findOne({
+    where: {
+      productId: req.body.productId,
+      userId: req.user.id,
+    },
+  });
+  console.log("findOneData", findOneData);
+  if (findOneData) {
+    const delData = await WishList.destroy({
+      where: {
+        productId: req.body.productId,
+        userId: req.user.id,
+      },
+    });
+    console.log("delData", delData);
+  } else {
+    const savedProduct = await WishList.create(req.body);
+    console.log("save", savedProduct);
+  }
+
+  return res.status(200).json({
+    isSuccess: true,
+  });
+});
 
 router.post("/", async (req, res) => {
   if (!req.body.name) {
@@ -55,9 +86,20 @@ router.post("/", async (req, res) => {
   });
 });
 
-router.get("/", async (req, res) => {
+router.get("/", tokenIsOptional, async (req, res) => {
+  const include = [{ model: Category, attributes: ["name"] }];
+
+  if (req.user) {
+    include.push({
+      model: WishList,
+      where: {
+        userId: req.user.id,
+      },
+      required: false,
+    });
+  }
   const productGet = await Product.findAll({
-    include: [{ model: Category, attributes: ["name"] }],
+    include,
     where: {},
   });
 

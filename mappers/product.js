@@ -2,6 +2,7 @@ const categoryMapper = require("./category");
 
 const mapper = (data) => {
   if (Array.isArray(data)) return data.map(mapper);
+
   const returnData = {
     id: data.id,
     name: data.name,
@@ -13,7 +14,12 @@ const mapper = (data) => {
     rating: data.rating,
     Images: [data.img1, data.img2, data.img3, data.img4],
     categoryId: data.categoryId,
+    isLiked: (data.isLiked = false),
   };
+
+  if (data.wishLists && data.wishLists[0]) {
+    returnData.isLiked = true;
+  }
   if (data.category) {
     returnData.category = categoryMapper(data.category);
   }

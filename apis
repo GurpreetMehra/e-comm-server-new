@@ -1,11 +1,7 @@
-POST  http://localhost:4000/variantValue HTTP/1.1
+GET   http://localhost:4000/products/wishList HTTP/1.1
 content-type: application/json
 
-{
- "valueOne": "data.valueOne",
-   "valueTwo": "data.valueTwo",
-   "valueThree": "data.valueThree"
-}
+
 
 
 
